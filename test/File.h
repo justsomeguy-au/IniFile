@@ -1,9 +1,11 @@
 #ifndef _FILE_H
 #define _FILE_H
 
+#include <strstream>
+
 #include "arduino_compat.h"
 
-class File {
+class File : public std::strstream {
 public:
   File(void);
   File(const char *filename, uint8_t mode);
@@ -26,7 +28,12 @@ public:
   long size(void);
   long position(void);
   int available(void);
-  
+	
+	void print(const char *str);
+	void print(uint8_t val , uint8_t size = 10);
+	void println(const char *str = NULL);
+	void println(uint8_t val, uint8_t size = 10);
+	
 private:
   FILE *_f;
   
@@ -37,7 +44,11 @@ public:
   SDClass(void) { };
   
   File open(const char *filename, uint8_t mode) const;
-  
+	
+	 bool begin(const int pin);
+	 bool exists(const char *filename);
+	 void remove(const char *filename);
+	
 private:
   
 };

@@ -3,7 +3,7 @@
 #include <fcntl.h>
 
 #include "File.h"
-
+#include <string>
 #include <iostream> // DEBUGGING
 using namespace::std;
 
@@ -13,6 +13,25 @@ File SDClass::open(const char *filename, uint8_t mode) const
 {
   return File(filename, mode);
 }
+
+bool SDClass::begin(const int pin)
+{
+	return true;
+}
+
+bool SDClass::exists(const char *filename)
+{
+	struct stat buffer;
+	return (stat (filename, &buffer) == 0);
+}
+
+
+void SDClass::remove(const char *filename)
+{
+	::remove(filename);
+}
+
+
 
 File::File(void)
 {
@@ -118,3 +137,52 @@ bool File::seek(int pos)
     return false;
   return (fseek(_f, pos, SEEK_SET) == -1 ? false : true);
 }
+
+void File::print(const char *str)
+{
+	strstream vstr;
+	vstr << str;
+	
+	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
+
+}
+
+void File::println(const char *str)
+{
+	strstream vstr;
+	if (str)
+		vstr << str << endl;
+	else
+		vstr << endl;
+	
+	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
+
+}
+
+
+void File::print(uint8_t val, uint8_t size)
+{
+	strstream vstr;
+	
+	switch (size)
+	{
+		case 10: vstr << dec << val; break;
+		case 16: vstr << hex << val; break;
+	}
+	
+	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
+}
+
+void File::println(uint8_t val, uint8_t size)
+{
+	strstream vstr;
+	switch (size)
+	{
+		case 10: vstr << dec << val << endl; break;
+		case 16: vstr << hex << val << endl; break;
+	}
+	
+	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
+}
+
+
