@@ -42,7 +42,8 @@ File::File(const char *filename, uint8_t mode)
 {
   //cout << "Opening " << filename << " with mode "
   //   << (mode & O_WRONLY ? "r+" : "r") << endl;
-  _f = fopen(filename, mode & O_WRONLY ? "r+" : "r");
+  // _f = fopen(filename, mode & O_WRONLY ? "r+" : "r");
+  _f = fopen(filename, "w+");
 }
 
 File::File(const File &a)
@@ -166,8 +167,9 @@ void File::print(uint8_t val, uint8_t size)
 	
 	switch (size)
 	{
-		case 10: vstr << dec << val; break;
-		case 16: vstr << hex << val; break;
+		case 8:  vstr << std::oct << (int)val; break;
+		case 10: vstr << std::dec << (int)val; break;
+		case 16: vstr << std::hex << (int)val; break;
 	}
 	
 	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
@@ -178,8 +180,9 @@ void File::println(uint8_t val, uint8_t size)
 	strstream vstr;
 	switch (size)
 	{
-		case 10: vstr << dec << val << endl; break;
-		case 16: vstr << hex << val << endl; break;
+		case 8:  vstr << std::oct << (int)val << endl; break;
+		case 10: vstr << std::dec << (int)val << endl; break;
+		case 16: vstr << std::hex << (int)val << endl; break;
 	}
 	
 	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
