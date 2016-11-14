@@ -42,8 +42,12 @@ File::File(const char *filename, uint8_t mode)
 {
   //cout << "Opening " << filename << " with mode "
   //   << (mode & O_WRONLY ? "r+" : "r") << endl;
-  // _f = fopen(filename, mode & O_WRONLY ? "r+" : "r");
-  _f = fopen(filename, "w+");
+	if (mode == O_WRONLY)
+		_f = fopen(filename, "w+");
+	else if (mode  == O_RDONLY)
+		_f = fopen(filename, "r+");
+	else
+		_f = fopen(filename, "r");
 }
 
 File::File(const File &a)
@@ -141,51 +145,93 @@ bool File::seek(int pos)
 
 void File::print(const char *str)
 {
-	strstream vstr;
-	vstr << str;
-	
-	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
-
+	if (str && strlen(str) > 0)
+		fwrite(str, strlen(str), 1, _f);
 }
 
 void File::println(const char *str)
 {
-	strstream vstr;
-	if (str)
-		vstr << str << endl;
-	else
-		vstr << endl;
+	char end = '\n';
 	
-	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
-
+	if (str && strlen(str) > 0)
+		fwrite(str, strlen(str), 1, _f);
+	fwrite(&end, 1, 1, _f);
 }
 
 
 void File::print(uint8_t val, uint8_t size)
 {
-	strstream vstr;
+	char buff[50];
 	
 	switch (size)
 	{
-		case 8:  vstr << std::oct << (int)val; break;
-		case 10: vstr << std::dec << (int)val; break;
-		case 16: vstr << std::hex << (int)val; break;
+		case 8:  sprintf(buff, "%o", val); break;
+		case 10: sprintf(buff, "%d", val); break;
+		case 16: sprintf(buff, "%X", val); break;
 	}
 	
-	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
+	fwrite(buff, strlen(buff), 1, _f);
 }
 
 void File::println(uint8_t val, uint8_t size)
 {
-	strstream vstr;
+	char buff[50];
+	
 	switch (size)
 	{
-		case 8:  vstr << std::oct << (int)val << endl; break;
-		case 10: vstr << std::dec << (int)val << endl; break;
-		case 16: vstr << std::hex << (int)val << endl; break;
+		case 8:  sprintf(buff, "%o\n", val); break;
+		case 10: sprintf(buff, "%d\n", val); break;
+		case 16: sprintf(buff, "%X\n", val); break;
 	}
 	
-	fwrite(vstr.str(), strlen(vstr.str()), 1, _f);
+	fwrite(buff, strlen(buff), 1, _f);
+}
+
+void File::print(uint16_t val, uint8_t size)
+{
+	char buff[50];
+	
+	switch (size)
+	{
+		case 8:  sprintf(buff, "%o", val); break;
+		case 10: sprintf(buff, "%d", val); break;
+		case 16: sprintf(buff, "%X", val); break;
+	}
+	
+	fwrite(buff, strlen(buff), 1, _f);
+}
+
+void File::println(uint16_t val, uint8_t size)
+{
+	char buff[50];
+	
+	switch (size)
+	{
+		case 8:  sprintf(buff, "%o\n", val); break;
+		case 10: sprintf(buff, "%d\n", val); break;
+		case 16: sprintf(buff, "%X\n", val); break;
+	}
+	
+	fwrite(buff, strlen(buff), 1, _f);
+}
+
+
+
+
+
+
+void File::print(float val)
+{
+	char buff[20];
+	sprintf(buff, "%f", val);
+	fwrite(buff, strlen(buff), 1, _f);
+}
+
+void File::println(float val)
+{
+	char buff[20];
+	sprintf(buff, "%f\n", val);
+	fwrite(buff, strlen(buff), 1, _f);
 }
 
 

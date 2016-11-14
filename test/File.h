@@ -30,9 +30,16 @@ public:
   int available(void);
 	
 	void print(const char *str);
-	void print(uint8_t val , uint8_t size = 10);
 	void println(const char *str = NULL);
+	
+	void print(uint8_t val , uint8_t size = 10);
 	void println(uint8_t val, uint8_t size = 10);
+	
+	void print(uint16_t val , uint8_t size = 10);
+	void println(uint16_t val, uint8_t size = 10);
+	
+	void print(float val);
+	void println(float val);
 	
 private:
   FILE *_f;
