@@ -20,6 +20,6 @@ typedef bool boolean;
 typedef unsigned char byte;
 
 #define FILE_READ O_RDONLY
-#define FILE_WRITE (O_RDWR | O_CREAT)
+#define FILE_WRITE O_WRONLY
 
 #endif
