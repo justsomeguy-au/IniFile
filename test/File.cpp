@@ -104,14 +104,14 @@ long File::position(void)
 }
  
 
-int File::available(void)
+long File::available(void)
 {
   if (!isOpen())
     return 0;
   return size() - position();
 }
 
-int File::read(void)
+size_t File::read(void)
 {
   if (!available())
     return -1;
@@ -120,7 +120,7 @@ int File::read(void)
   return c;
 }
 
-int File::read(void *buf, int n)
+size_t File::read(void *buf, size_t n)
 {
   return fread(buf, 1, n ,_f);
 }

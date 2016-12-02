@@ -16,8 +16,8 @@ public:
   
   void close(void);
   
-  int read(void);
-  int read(void *buf, int n);
+  size_t read(void);
+  size_t read(void *buf, size_t n);
 
   int peek(void);
   bool seek(int pos);
@@ -27,7 +27,7 @@ public:
 
   long size(void);
   long position(void);
-  int available(void);
+  long available(void);
 	
 	void print(const char *str);
 	void println(const char *str = NULL);
